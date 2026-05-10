@@ -1,6 +1,16 @@
 class Produto:
-    def __init__(self, id, nome, preco, stock, categoria, empresa, email):
-        # dados principais do produto
+
+    def __init__(
+        self,
+        id,
+        nome,
+        preco,
+        stock,
+        categoria,
+        empresa,
+        email,
+        telefone
+    ):
 
         self.id = id
         self.nome = nome
@@ -9,15 +19,16 @@ class Produto:
         self.categoria = categoria
         self.empresa = empresa
         self.email = email
+        self.telefone = telefone
 
     def mostrar(self):
-        # mostra dados do produto
 
-        print("ID:", self.id)
-        print("Nome:", self.nome)
-        print("Preço:", self.preco)
-        print("Stock:", self.stock)
-        print("Categoria:", self.categoria)
-        print("Empresa:", self.empresa)
-        print("Email:", self.email)
-        print("----------------------")
+        print(f"\nID: {self.id}")
+        print(f"Nome: {self.nome}")
+        print(f"Preço: {self.preco}")
+        print(f"Stock: {self.stock}")
+        print(f"Categoria: {self.categoria}")
+        print(f"Empresa: {self.empresa}")
+        print(f"Email: {self.email}")
+        print(f"Telefone: {self.telefone}")
+        print("-" * 30)
