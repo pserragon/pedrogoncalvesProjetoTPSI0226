@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from services.crud import adicionar_produto
 from services.crud import listar_produtos
 from services.crud import editar_produto
@@ -15,95 +17,342 @@ from services.json_manager import carregar_produtos
 from services.json_manager import guardar_produtos
 
 from services.produtos_exemplo import carregar_produtos_exemplo
+from services.authentication import login
 
-# LISTA PRINCIPAL
+from services.email_stock import gerar_email_stock
+from services.exportacao import menu_exportacao
+
+
+# BYTE TECH
+# Sistema de Gestão de Loja Informática
+
+
+# lista principal
+
 lista_produtos = carregar_produtos()
 
-# MENU PRINCIPAL
+
+# login
+
+acesso = login()
+
+if acesso is False:
+
+    print("\nAcesso negado.")
+    exit()
+
+
+# menu principal
+
 while True:
 
-    print("\n=== BYTE TECH ===")
-    print("1 - Adicionar produto")
+    # data e hora
+
+    data_atual = datetime.now()
+
+    data_formatada = data_atual.strftime(
+        "%d-%m-%Y %H:%M:%S"
+    )
+
+    print("\n========== BYTE TECH ==========")
+
+    print(f"Data e Hora: {data_formatada}")
+
+
+    # alertas de stock
+
+    alertas = []
+
+    for produto in lista_produtos:
+
+
+        # produtos caros
+
+        if produto.preco >= 300:
+
+            if produto.stock == 0:
+
+                alertas.append(
+
+                    f"{produto.nome} -> QUEBRA DE STOCK"
+
+                )
+
+            elif produto.stock <= 2:
+
+                alertas.append(
+
+                    f"{produto.nome} -> ENCOMENDAR STOCK"
+
+                )
+
+
+        # produtos normais
+
+        else:
+
+            if produto.stock == 0:
+
+                alertas.append(
+
+                    f"{produto.nome} -> QUEBRA DE STOCK"
+
+                )
+
+            elif produto.stock < 5:
+
+                alertas.append(
+
+                    f"{produto.nome} -> STOCK BAIXO"
+
+                )
+
+
+    # mostrar alertas
+
+    if len(alertas) > 0:
+
+        print("\n⚠ ALERTA DE STOCK ⚠")
+
+        for alerta in alertas:
+
+            print(alerta)
+
+
+    print("\n1 - Adicionar produto")
     print("2 - Listar produtos")
     print("3 - Editar produto")
     print("4 - Eliminar produto")
-    print("5 - Pesquisar produto")
+    print("5 - Pesquisa linear")
     print("6 - Estatísticas")
     print("7 - Ordenar produtos")
     print("8 - Guardar produtos")
-    print("9 - Pesquisa Binária")
+    print("9 - Pesquisa binária")
     print("10 - Carregar produtos exemplo")
+    print("11 - Gerar email stock baixo")
+    print("12 - Exportação de dados")
     print("0 - Sair")
 
-    opcao = input("Escolha uma opção: ")
+    opcao = input("\nEscolha uma opção: ")
 
-    # ADICIONAR PRODUTO
+
+    # adicionar produto
+
     if opcao == "1":
 
-        adicionar_produto(lista_produtos)
+        try:
 
-    # LISTAR PRODUTOS
+            adicionar_produto(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao adicionar produto: {erro}")
+
+
+    # listar produtos
+
     elif opcao == "2":
 
-        listar_produtos(lista_produtos)
+        try:
 
-    # EDITAR PRODUTO
+            listar_produtos(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao listar produtos: {erro}")
+
+
+    # editar produto
+
     elif opcao == "3":
 
-        editar_produto(lista_produtos)
+        try:
 
-    # ELIMINAR PRODUTO
+            editar_produto(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao editar produto: {erro}")
+
+
+    # eliminar produto
+
     elif opcao == "4":
 
-        eliminar_produto(lista_produtos)
+        try:
 
-    # PESQUISA LINEAR
+            eliminar_produto(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao eliminar produto: {erro}")
+
+
+    # pesquisa linear
+
     elif opcao == "5":
 
-        pesquisa_linear(lista_produtos)
+        try:
 
-    # ESTATÍSTICAS
+            pesquisa_linear(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro na pesquisa: {erro}")
+
+
+    # estatísticas
+
     elif opcao == "6":
 
-        mostrar_estatisticas(lista_produtos)
+        try:
 
-    # ORDENAÇÃO
+            mostrar_estatisticas(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao mostrar estatísticas: {erro}")
+
+
+    # ordenação
+
     elif opcao == "7":
 
-        print("\n=== ORDENAÇÃO ===")
+        print("\n===== ORDENAÇÃO =====")
         print("1 - Bubble Sort (Preço)")
         print("2 - Selection Sort (Nome)")
 
-        opcao_ordenar = input("Escolha uma opção: ")
+        opcao_ordenar = input("\nEscolha uma opção: ")
+
+        print("\n===== ORDEM =====")
+        print("1 - Crescente")
+        print("2 - Decrescente")
+
+        opcao_ordem = input("\nEscolha uma ordem: ")
+
+
+        # definir ordem
+
+        if opcao_ordem == "1":
+
+            ordem = "crescente"
+
+        elif opcao_ordem == "2":
+
+            ordem = "decrescente"
+
+        else:
+
+            print("\nOrdem inválida.")
+            continue
+
+
+        # bubble sort
 
         if opcao_ordenar == "1":
 
-            bubble_sort_preco(lista_produtos)
+            try:
+
+                bubble_sort_preco(
+                    lista_produtos,
+                    ordem
+                )
+
+            except Exception as erro:
+
+                print(f"\nErro na ordenação: {erro}")
+
+
+        # selection sort
 
         elif opcao_ordenar == "2":
 
-            selection_sort_nome(lista_produtos)
+            try:
+
+                selection_sort_nome(
+                    lista_produtos,
+                    ordem
+                )
+
+            except Exception as erro:
+
+                print(f"\nErro na ordenação: {erro}")
+
+
+        # opção inválida
 
         else:
 
             print("\nOpção inválida.")
 
-    # GUARDAR PRODUTOS
+
+    # guardar produtos
+
     elif opcao == "8":
 
-        guardar_produtos(lista_produtos)
+        try:
 
-    # PESQUISA BINÁRIA
+            guardar_produtos(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao guardar produtos: {erro}")
+
+
+    # pesquisa binária
+
     elif opcao == "9":
 
-        pesquisa_binaria(lista_produtos)
+        try:
 
-    # PRODUTOS EXEMPLO
+            pesquisa_binaria(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro na pesquisa binária: {erro}")
+
+
+    # carregar produtos exemplo
+
     elif opcao == "10":
 
-        carregar_produtos_exemplo(lista_produtos)
+        try:
 
-    # SAIR
+            carregar_produtos_exemplo(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao carregar produtos exemplo: {erro}")
+
+
+    # gerar email stock baixo
+
+    elif opcao == "11":
+
+        try:
+
+            gerar_email_stock(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro ao gerar email: {erro}")
+
+
+    # exportação de dados
+
+    elif opcao == "12":
+
+        try:
+
+            menu_exportacao(lista_produtos)
+
+        except Exception as erro:
+
+            print(f"\nErro na exportação: {erro}")
+
+
+    # sair
+
     elif opcao == "0":
 
         guardar = input(
@@ -112,12 +361,21 @@ while True:
 
         if guardar == "s":
 
-            guardar_produtos(lista_produtos)
+            try:
+
+                guardar_produtos(lista_produtos)
+
+            except Exception as erro:
+
+                print(f"\nErro ao guardar produtos: {erro}")
+
 
         print("\nA sair do sistema...")
         break
 
-    # OPÇÃO INVÁLIDA
+
+    # opção inválida
+
     else:
 
         print("\nOpção inválida.")

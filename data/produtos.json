@@ -1,0 +1,12 @@
+[
+    {
+        "id": 2,
+        "nome": "Ryzen5600",
+        "preco": 149.0,
+        "stock": 8,
+        "categoria": "CPU",
+        "empresa": "AMD",
+        "email": "amd@hardware.com",
+        "telefone": "936547821"
+    }
+]

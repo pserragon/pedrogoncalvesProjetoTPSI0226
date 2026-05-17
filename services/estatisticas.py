@@ -1,13 +1,20 @@
-# ESTATÍSTICAS
+
+# ESTATÍSTICAS BYTE TECH
+
+# estatísticas
+
 def mostrar_estatisticas(lista_produtos):
 
-    if len(lista_produtos) == 0:
+    try:
 
-        print("\nNenhum produto registado.")
+        if len(lista_produtos) == 0:
 
-    else:
+            print("\nNenhum produto registado.")
+            return
 
-        # PRODUTO MAIS CARO
+
+        # produto mais caro
+
         produto_caro = lista_produtos[0]
 
         for produto in lista_produtos:
@@ -16,11 +23,16 @@ def mostrar_estatisticas(lista_produtos):
 
                 produto_caro = produto
 
-        print("\n=== PRODUTO MAIS CARO ===")
+
+        print("\n===== PRODUTO MAIS CARO =====")
 
         produto_caro.mostrar()
 
-        # MÉDIA DE PREÇOS
+        print(f"\nPreço: {produto_caro.preco:.2f} €")
+
+
+        # média preços
+
         soma_precos = 0
 
         for produto in lista_produtos:
@@ -31,73 +43,102 @@ def mostrar_estatisticas(lista_produtos):
 
         print(f"\nMédia de preços: {media:.2f} €")
 
-        # TOTAL DE PRODUTOS
+
+        # total produtos
+
         total_produtos = len(lista_produtos)
 
         print(f"\nTotal de produtos: {total_produtos}")
 
-        # VALOR TOTAL DO STOCK
+
+        # valor total stock
+
         valor_stock = 0
 
         for produto in lista_produtos:
 
             valor_stock += produto.preco * produto.stock
 
-        print(f"\nValor total do stock: {valor_stock:.2f} €")
+        print(
 
-        # ALERTAS DE STOCK
-        print("\n=== ALERTAS DE STOCK ===")
+            f"\nValor total do stock: {valor_stock:.2f} €"
+
+        )
+
+
+        # alertas stock
+
+        print("\n===== ALERTAS DE STOCK =====")
 
         encontrou_alerta = False
 
+
         for produto in lista_produtos:
 
+
             # produtos caros
+
             if produto.preco >= 300:
 
                 if produto.stock == 0:
 
                     print(
-                        f"{produto.nome} -> QUEBRA DE STOCK!"
+
+                        f"{produto.nome} -> QUEBRA DE STOCK"
+
                     )
 
                     encontrou_alerta = True
+
 
                 elif produto.stock <= 2:
 
                     print(
-                        f"{produto.nome} -> ENCOMENDAR STOCK!"
+
+                        f"{produto.nome} -> ENCOMENDAR STOCK"
+
                     )
 
                     encontrou_alerta = True
 
+
             # produtos normais
+
             else:
 
                 if produto.stock == 0:
 
                     print(
-                        f"{produto.nome} -> QUEBRA DE STOCK!"
+
+                        f"{produto.nome} -> QUEBRA DE STOCK"
+
                     )
 
                     encontrou_alerta = True
+
 
                 elif produto.stock < 5:
 
                     print(
-                        f"{produto.nome} -> STOCK BAIXO!"
+
+                        f"{produto.nome} -> STOCK BAIXO"
+
                     )
 
                     encontrou_alerta = True
 
-        if encontrou_alerta == False:
 
-            print("Stock estável.")
+        if encontrou_alerta is False:
 
-        # PRODUTOS SEM STOCK
-        print("\n=== PRODUTOS SEM STOCK ===")
+            print("\nStock estável.")
+
+
+        # produtos sem stock
+
+        print("\n===== PRODUTOS SEM STOCK =====")
 
         encontrou_sem_stock = False
+
 
         for produto in lista_produtos:
 
@@ -107,6 +148,86 @@ def mostrar_estatisticas(lista_produtos):
 
                 encontrou_sem_stock = True
 
-        if encontrou_sem_stock == False:
 
-            print("Nenhum produto sem stock.")
+        if encontrou_sem_stock is False:
+
+            print("\nNenhum produto sem stock.")
+
+    except Exception as erro:
+
+        print(f"\nErro ao mostrar estatísticas: {erro}")
+
+
+# filtro preço acima
+
+def filtrar_preco_acima(lista_produtos, valor):
+
+    try:
+
+        encontrados = []
+
+        for produto in lista_produtos:
+
+            if produto.preco > valor:
+
+                encontrados.append(produto)
+
+        return encontrados
+
+    except Exception as erro:
+
+        print(f"\nErro no filtro de preço: {erro}")
+
+        return []
+
+
+# filtro intervalo preço
+
+def filtrar_intervalo_preco(
+
+    lista_produtos,
+    minimo,
+    maximo
+
+):
+
+    try:
+
+        encontrados = []
+
+        for produto in lista_produtos:
+
+            if minimo <= produto.preco <= maximo:
+
+                encontrados.append(produto)
+
+        return encontrados
+
+    except Exception as erro:
+
+        print(f"\nErro no filtro de intervalo: {erro}")
+
+        return []
+
+
+# filtro stock baixo
+
+def filtrar_stock_baixo(lista_produtos):
+
+    try:
+
+        encontrados = []
+
+        for produto in lista_produtos:
+
+            if produto.stock < 5:
+
+                encontrados.append(produto)
+
+        return encontrados
+
+    except Exception as erro:
+
+        print(f"\nErro no filtro de stock: {erro}")
+
+        return []

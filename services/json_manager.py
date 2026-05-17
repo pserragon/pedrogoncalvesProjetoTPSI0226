@@ -1,3 +1,6 @@
+
+# JSON MANAGER BYTE TECH
+
 import json
 
 from models.produto import Produto
@@ -10,7 +13,13 @@ def carregar_produtos():
 
     try:
 
-        with open("dados/produtos.json", "r") as ficheiro:
+        with open(
+
+            "data/produtos.json",
+            "r",
+            encoding="utf-8"
+
+        ) as ficheiro:
 
             dados = json.load(ficheiro)
 
@@ -35,33 +44,60 @@ def carregar_produtos():
             "\nFicheiro JSON não encontrado. Será criado automaticamente."
         )
 
+        with open(
+
+            "data/produtos.json",
+            "w",
+            encoding="utf-8"
+
+        ) as ficheiro:
+
+            json.dump([], ficheiro)
+
+    except Exception as erro:
+
+        print(f"\nErro ao carregar JSON: {erro}")
+
     return lista_produtos
 
 
 # GUARDAR JSON
 def guardar_produtos(lista_produtos):
 
-    lista_json = []
+    try:
 
-    for produto in lista_produtos:
+        lista_json = []
 
-        lista_json.append({
-            "id": produto.id,
-            "nome": produto.nome,
-            "preco": produto.preco,
-            "stock": produto.stock,
-            "categoria": produto.categoria,
-            "empresa": produto.empresa,
-            "email": produto.email,
-            "telefone": produto.telefone
-        })
+        for produto in lista_produtos:
 
-    with open("dados/produtos.json", "w") as ficheiro:
+            lista_json.append({
+                "id": produto.id,
+                "nome": produto.nome,
+                "preco": produto.preco,
+                "stock": produto.stock,
+                "categoria": produto.categoria,
+                "empresa": produto.empresa,
+                "email": produto.email,
+                "telefone": produto.telefone
+            })
 
-        json.dump(
-            lista_json,
-            ficheiro,
-            indent=4
-        )
+        with open(
 
-    print("\nProdutos guardados com sucesso!")
+            "data/produtos.json",
+            "w",
+            encoding="utf-8"
+
+        ) as ficheiro:
+
+            json.dump(
+                lista_json,
+                ficheiro,
+                indent=4,
+                ensure_ascii=False
+            )
+
+        print("\nProdutos guardados com sucesso!")
+
+    except Exception as erro:
+
+        print(f"\nErro ao guardar JSON: {erro}")

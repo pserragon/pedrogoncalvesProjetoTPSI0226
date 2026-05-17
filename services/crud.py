@@ -1,14 +1,18 @@
+# CRUD BYTE TECH
+
 import re
 
 from models.produto import Produto
 
 
-# ADICIONAR PRODUTO
+# adicionar produto
+
 def adicionar_produto(lista_produtos):
 
     try:
 
-        # gerar ID automático
+        # gerar id automático
+
         if len(lista_produtos) == 0:
 
             id = 1
@@ -20,11 +24,16 @@ def adicionar_produto(lista_produtos):
         print(f"\nID gerado automaticamente: {id}")
 
         nome = input("Nome: ")
+
         preco = float(input("Preço: "))
+
         stock = int(input("Stock: "))
+
         categoria = input("Categoria: ")
 
-        # REGEX EMPRESA
+
+        # validar empresa
+
         empresa = input("Empresa: ")
 
         padrao_empresa = r"^[A-Za-zÀ-ÿ\s]+$"
@@ -34,36 +43,55 @@ def adicionar_produto(lista_produtos):
             empresa
         )
 
-        if resultado_empresa:
+        if resultado_empresa is None:
 
-            print("\nEmpresa válida!")
-            print("Match:", resultado_empresa.group())
-            print("Posição:", resultado_empresa.span())
+            print("\nEmpresa inválida.")
+            return
 
         else:
 
-            print("\nEmpresa inválida!")
-            return
+            print(
+                "Regex empresa:",
+                resultado_empresa.group()
+            )
 
-        # REGEX EMAIL
+            print(
+                "Posição:",
+                resultado_empresa.span()
+            )
+
+
+        # validar email
+
         email = input("Email: ")
 
-        padrao = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        padrao_email = r"^[\w\.-]+@[\w\.-]+\.\w+$"
 
-        resultado = re.match(padrao, email)
+        resultado_email = re.match(
+            padrao_email,
+            email
+        )
 
-        if resultado:
+        if resultado_email is None:
 
-            print("\nEmail válido!")
-            print("Match:", resultado.group())
-            print("Posição:", resultado.span())
+            print("\nEmail inválido.")
+            return
 
         else:
 
-            print("\nEmail inválido!")
-            return
+            print(
+                "Regex email:",
+                resultado_email.group()
+            )
 
-        # REGEX TELEFONE
+            print(
+                "Posição:",
+                resultado_email.span()
+            )
+
+
+        # validar telefone
+
         telefone = input("Telefone: ")
 
         padrao_telefone = r"^9[1236][0-9]{7}$"
@@ -73,18 +101,28 @@ def adicionar_produto(lista_produtos):
             telefone
         )
 
-        if resultado_telefone:
+        if resultado_telefone is None:
 
-            print("\nTelefone válido!")
-            print("Match:", resultado_telefone.group())
-            print("Posição:", resultado_telefone.span())
+            print("\nTelefone inválido.")
+            return
 
         else:
 
-            print("\nTelefone inválido!")
-            return
+            print(
+                "Regex telefone:",
+                resultado_telefone.group()
+            )
+
+            print(
+                "Posição:",
+                resultado_telefone.span()
+            )
+
+
+        # criar produto
 
         produto = Produto(
+
             id,
             nome,
             preco,
@@ -93,6 +131,7 @@ def adicionar_produto(lista_produtos):
             empresa,
             email,
             telefone
+
         )
 
         lista_produtos.append(produto)
@@ -101,31 +140,45 @@ def adicionar_produto(lista_produtos):
 
     except ValueError:
 
-        print("\nERRO: Introduziu valores inválidos.")
+        print("\nValores inválidos.")
+
+    except Exception as erro:
+
+        print(f"\nErro ao adicionar produto: {erro}")
 
 
-# LISTAR PRODUTOS
+# listar produtos
+
 def listar_produtos(lista_produtos):
 
-    if len(lista_produtos) == 0:
+    try:
 
-        print("\nNenhum produto registado.")
+        if len(lista_produtos) == 0:
 
-    else:
+            print("\nNenhum produto registado.")
 
-        print("\n=== LISTA DE PRODUTOS ===")
+        else:
 
-        for produto in lista_produtos:
+            print("\n===== LISTA DE PRODUTOS =====")
 
-            produto.mostrar()
+            for produto in lista_produtos:
+
+                produto.mostrar()
+
+    except Exception as erro:
+
+        print(f"\nErro ao listar produtos: {erro}")
 
 
-# EDITAR PRODUTO
+# editar produto
+
 def editar_produto(lista_produtos):
 
     try:
 
-        id_editar = int(input("ID do produto a editar: "))
+        id_editar = int(
+            input("\nID do produto a editar: ")
+        )
 
         encontrado = False
 
@@ -137,7 +190,7 @@ def editar_produto(lista_produtos):
 
                 while True:
 
-                    print("\n=== EDITAR PRODUTO ===")
+                    print("\n===== EDITAR PRODUTO =====")
                     print("1 - Nome")
                     print("2 - Preço")
                     print("3 - Stock")
@@ -148,8 +201,11 @@ def editar_produto(lista_produtos):
                     print("0 - Voltar")
 
                     opcao_editar = input(
-                        "Escolha uma opção: "
+                        "\nEscolha uma opção: "
                     )
+
+
+                    # editar nome
 
                     if opcao_editar == "1":
 
@@ -157,9 +213,10 @@ def editar_produto(lista_produtos):
                             "Novo nome: "
                         )
 
-                        print(
-                            "\nNome atualizado com sucesso!"
-                        )
+                        print("\nNome atualizado.")
+
+
+                    # editar preço
 
                     elif opcao_editar == "2":
 
@@ -167,9 +224,10 @@ def editar_produto(lista_produtos):
                             input("Novo preço: ")
                         )
 
-                        print(
-                            "\nPreço atualizado com sucesso!"
-                        )
+                        print("\nPreço atualizado.")
+
+
+                    # editar stock
 
                     elif opcao_editar == "3":
 
@@ -177,9 +235,10 @@ def editar_produto(lista_produtos):
                             input("Novo stock: ")
                         )
 
-                        print(
-                            "\nStock atualizado com sucesso!"
-                        )
+                        print("\nStock atualizado.")
+
+
+                    # editar categoria
 
                     elif opcao_editar == "4":
 
@@ -187,19 +246,40 @@ def editar_produto(lista_produtos):
                             "Nova categoria: "
                         )
 
-                        print(
-                            "\nCategoria atualizada com sucesso!"
-                        )
+                        print("\nCategoria atualizada.")
+
+
+                    # editar empresa
 
                     elif opcao_editar == "5":
 
-                        produto.empresa = input(
+                        nova_empresa = input(
                             "Nova empresa: "
                         )
 
-                        print(
-                            "\nEmpresa atualizada com sucesso!"
+                        padrao_empresa = r"^[A-Za-zÀ-ÿ\s]+$"
+
+                        resultado_empresa = re.match(
+                            padrao_empresa,
+                            nova_empresa
                         )
+
+                        if resultado_empresa:
+
+                            produto.empresa = nova_empresa
+
+                            print(
+                                "\nEmpresa atualizada."
+                            )
+
+                        else:
+
+                            print(
+                                "\nEmpresa inválida."
+                            )
+
+
+                    # editar email
 
                     elif opcao_editar == "6":
 
@@ -207,36 +287,29 @@ def editar_produto(lista_produtos):
                             "Novo email: "
                         )
 
-                        padrao = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+                        padrao_email = r"^[\w\.-]+@[\w\.-]+\.\w+$"
 
-                        resultado = re.match(
-                            padrao,
+                        resultado_email = re.match(
+                            padrao_email,
                             novo_email
                         )
 
-                        if resultado:
+                        if resultado_email:
 
                             produto.email = novo_email
 
                             print(
-                                "\nEmail atualizado com sucesso!"
-                            )
-
-                            print(
-                                "Match:",
-                                resultado.group()
-                            )
-
-                            print(
-                                "Posição:",
-                                resultado.span()
+                                "\nEmail atualizado."
                             )
 
                         else:
 
                             print(
-                                "\nEmail inválido!"
+                                "\nEmail inválido."
                             )
+
+
+                    # editar telefone
 
                     elif opcao_editar == "7":
 
@@ -256,39 +329,53 @@ def editar_produto(lista_produtos):
                             produto.telefone = novo_telefone
 
                             print(
-                                "\nTelefone atualizado com sucesso!"
+                                "\nTelefone atualizado."
                             )
 
                         else:
 
                             print(
-                                "\nTelefone inválido!"
+                                "\nTelefone inválido."
                             )
+
+
+                    # voltar
 
                     elif opcao_editar == "0":
 
                         break
 
+
+                    # opção inválida
+
                     else:
 
                         print("\nOpção inválida.")
 
-        if encontrado == False:
+                break
+
+
+        if encontrado is False:
 
             print("\nProduto não encontrado.")
 
     except ValueError:
 
-        print("\nERRO: Introduziu valores inválidos.")
+        print("\nValores inválidos.")
+
+    except Exception as erro:
+
+        print(f"\nErro ao editar produto: {erro}")
 
 
-# ELIMINAR PRODUTO
+# eliminar produto
+
 def eliminar_produto(lista_produtos):
 
     try:
 
         id_eliminar = int(
-            input("ID do produto a eliminar: ")
+            input("\nID do produto a eliminar: ")
         )
 
         encontrado = False
@@ -297,8 +384,12 @@ def eliminar_produto(lista_produtos):
 
             if produto.id == id_eliminar:
 
+                encontrado = True
+
                 confirmacao = input(
-                    f"Tem a certeza que deseja eliminar {produto.nome}? (s/n): "
+
+                    f"\nTem a certeza que deseja eliminar {produto.nome}? (s/n): "
+
                 ).lower()
 
                 if confirmacao == "s":
@@ -315,13 +406,17 @@ def eliminar_produto(lista_produtos):
                         "\nEliminação cancelada."
                     )
 
-                encontrado = True
                 break
 
-        if encontrado == False:
+
+        if encontrado is False:
 
             print("\nProduto não encontrado.")
 
     except ValueError:
 
-        print("\nERRO: Introduziu valores inválidos.")
+        print("\nValores inválidos.")
+
+    except Exception as erro:
+
+        print(f"\nErro ao eliminar produto: {erro}")
